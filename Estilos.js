@@ -18,5 +18,8 @@ export default StyleSheet.create({
         borderBottomWidth: 1,
         width: 200,
         height: 50,
+    },
+    title: {
+        fontSize: 25,
     }
 })
