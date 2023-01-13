@@ -1,5 +1,6 @@
-import { Button, FlatList, Text, TextInput, View } from 'react-native';
+import { Button, FlatList, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
+import CustomModal from './src/components/CustomModal.js';
 import { StatusBar } from 'expo-status-bar';
 import styles from './Estilos.js';
 import { useState } from 'react';
@@ -10,6 +11,10 @@ export default function App() {
 
     const [itemList, setItemList] = useState([])
 
+    const [modalVisible, setModalVisible] = useState(false)
+
+    const [selectedItem, setSelectedItem] = useState()
+
     const addItem = (item) => {
             if (item != '') {
                 setItemList([...itemList, {id: itemList.length +1, value: item}])
@@ -19,6 +24,18 @@ export default function App() {
 
 	const onHandlerChangeItem = (t) => {
         setText(t)
+    }
+
+    const deleteItem = (id) => {
+        const newList = itemList.filter(itemList => itemList.id !== id)
+        setItemList(newList)
+        setSelectedItem({})
+        setModalVisible(!modalVisible);
+    }
+
+    const showModal = (id) => {
+    setSelectedItem(itemList.find(itemList => itemList.id === id))
+    setModalVisible(!modalVisible);
     }
 
     return (
@@ -37,8 +54,19 @@ export default function App() {
             <FlatList
                 data={itemList}
                 keyExtractor={ item => item.id.toString() }
-                renderItem={({item}) => (<Text style={{fontSize: 20}}>· {item.value}</Text>)}
+                renderItem={({item}) => (
+                    <TouchableOpacity onPress={() => showModal(item.id) }>
+                        <Text style={{fontSize: 20}}>· {item.value}</Text>
+                    </TouchableOpacity>)}
             />
+
+            <CustomModal
+                deleteItem={deleteItem} 
+                setModalVisible={setModalVisible}
+                selectedItem={selectedItem}
+                modalVisible={modalVisible}
+            />
+                
         </View>
     );
 }
