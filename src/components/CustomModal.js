@@ -1,7 +1,7 @@
 import { Button, Modal, Text, View } from 'react-native';
 
 import React from 'react'
-import styles from '../../Estilos';
+import styles from '../Estilos/Estilos';
 
 const CustomModal = ({deleteItem, setModalVisible, selectedItem, modalVisible}) => {
 

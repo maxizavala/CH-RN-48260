@@ -1,73 +1,50 @@
-import { Button, FlatList, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Button, Text, View } from 'react-native';
 
-import CustomModal from './src/components/CustomModal.js';
+import AddTasks from './src/screens/AddTasks.js';
+import AppLoading from 'expo-app-loading'
 import { StatusBar } from 'expo-status-bar';
-import styles from './Estilos.js';
+import ViewTasks from './src/screens/ViewTasks.js';
+import colors from './src/Estilos/constants/Colors.js';
+import styles from './src/Estilos/Estilos.js';
+import { useFonts } from 'expo-font'
 import { useState } from 'react';
 
 export default function App() {
 
-    const [text, setText] = useState('')
+    const [view, setView] = useState(false)
 
     const [itemList, setItemList] = useState([])
 
-    const [modalVisible, setModalVisible] = useState(false)
-
-    const [selectedItem, setSelectedItem] = useState()
-
-    const addItem = (item) => {
-            if (item != '') {
-                setItemList([...itemList, {id: itemList.length +1, value: item}])
-                setText('') 
-            }
+    const viewTasks = () => {
+        setView(!view)
     }
 
-	const onHandlerChangeItem = (t) => {
-        setText(t)
-    }
-
-    const deleteItem = (id) => {
-        const newList = itemList.filter(itemList => itemList.id !== id)
-        setItemList(newList)
-        setSelectedItem({})
-        setModalVisible(!modalVisible);
-    }
-
-    const showModal = (id) => {
-    setSelectedItem(itemList.find(itemList => itemList.id === id))
-    setModalVisible(!modalVisible);
-    }
+    const [loaded] = useFonts({
+        Bebas: require('./assets/fonts/BebasNeue-Regular.ttf'),
+    })
+	
+	if (!loaded) { return <AppLoading/> }
 
     return (
-        <View style={styles.container}>
+        <>
             <StatusBar style="auto" />
-            <Text style={styles.title}>Task List</Text>
-            <View style={styles.inputContainer}>
-                <TextInput
-                    placeholder = "Item de la Lista"
-                    style={styles.input}
-                    value={text}
-                    onChangeText={onHandlerChangeItem}
-                />
-                <Button title="ADD" onPress={() => addItem(text)} />
-            </View>
-            <FlatList
-                data={itemList}
-                keyExtractor={ item => item.id.toString() }
-                renderItem={({item}) => (
-                    <TouchableOpacity onPress={() => showModal(item.id) }>
-                        <Text style={{fontSize: 20}}>· {item.value}</Text>
-                    </TouchableOpacity>)}
-            />
-
-            <CustomModal
-                deleteItem={deleteItem} 
-                setModalVisible={setModalVisible}
-                selectedItem={selectedItem}
-                modalVisible={modalVisible}
-            />
+            <View style={styles.container}>
+                <Text style={styles.title}>Task List</Text>
                 
-        </View>
+                { !view ? <AddTasks itemList={itemList} setItemList={setItemList} /> : null }
+
+                <View style={styles.containerButton}>
+                    <Button 
+                        title={view ? "ADD TASKS" : "SHOW TASKS"}
+                        onPress={() => viewTasks()}
+                        color={colors.primary} 
+                    />
+                </View>
+                
+                { view ? <ViewTasks itemList={itemList} setItemList={setItemList} /> : null }
+
+            </View>
+        </>
     );
 }
 

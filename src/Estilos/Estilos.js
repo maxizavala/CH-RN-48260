@@ -21,5 +21,9 @@ export default StyleSheet.create({
     },
     title: {
         fontSize: 25,
+        fontFamily: 'Bebas',
+    },
+    containerButton: {
+        margin: 30,
     }
 })
