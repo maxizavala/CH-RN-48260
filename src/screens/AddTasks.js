@@ -1,38 +1,49 @@
-import { Button, TextInput, View } from 'react-native';
+import { Button, ScrollView, StyleSheet, Text, View } from "react-native"
 
-import React from 'react'
-import colors from '../Estilos/constants/Colors.js';
-import styles from '../Estilos/Estilos.js';
-import { useState } from 'react';
+import React from "react"
 
-const AddTasks = ({itemList, setItemList}) => {
+const AddTasks = ({ navigation }) => {
 
-    const [text, setText] = useState('')
+    return(
+        <View style={{flex: 1}}> 
+            <View style={styles.header}>
+                <Text style={styles.title}>ADD TASKS</Text>
+            </View> 
+            
+            <ScrollView>
+                
+            </ScrollView>
 
-    const addItem = (item) => {
-        if (item != '') {
-            setItemList([...itemList, {id: itemList.length +1, value: item}])
-            setText('') 
-        }
-    }
-
-    const onHandlerChangeItem = (t) => {
-        setText(t)
-    }
-    
-    return (
-        <>
-            <View style={styles.inputContainer}>
-                <TextInput
-                    placeholder = "Item de la Lista"
-                    style={styles.input}
-                    value={text}
-                    onChangeText={onHandlerChangeItem}
-                />
-                <Button title="ADD" onPress={() => addItem(text)} color={colors.accent} />
+            <View style={styles.footer}>
+                <Button title="ADD TASKS" onPress={ () => navigation.push('AddTasks') } />
+                <Button title="VIEW TASKS" onPress={ () => navigation.push('ViewTasks') } />
             </View>
-        </>
+        </View>
     )
+
 }
+
+const styles = StyleSheet.create({
+    header: {
+        backgroundColor: 'black', 
+        height: '10%', 
+        width: '100%', 
+        justifyContent: 'center', 
+        alignItems: 'center'
+    },
+    title: {
+        color: 'gray',
+        fontSize: 20,
+        marginTop: 30,
+    },
+    footer: {
+        backgroundColor: 'black', 
+        height: '6%', 
+        width: '100%',
+        alignItems: "center",
+        justifyContent: "center",
+        flexDirection: "row",
+    }
+})
 
 export default AddTasks

@@ -1,46 +1,49 @@
-import { FlatList, Text, TouchableOpacity } from 'react-native'
+import { Button, ScrollView, StyleSheet, Text, View } from "react-native"
 
-import CustomModal from '../components/CustomModal'
-import React from 'react'
-import { useState } from 'react'
+import React from "react"
 
-const ViewTasks = ({itemList, setItemList}) => {
+const ViewTasks = ({ navigation }) => {
 
-    const [modalVisible, setModalVisible] = useState(false)
+    return(
+        <View style={{flex: 1}}> 
+            <View style={styles.header}>
+                <Text style={styles.title}>VIEW TASKS</Text>
+            </View> 
+            
+            <ScrollView>
+                
+            </ScrollView>
 
-    const [selectedItem, setSelectedItem] = useState()
-
-    const deleteItem = (id) => {
-        const newList = itemList.filter(itemList => itemList.id !== id)
-        setItemList(newList)
-        setSelectedItem({})
-        setModalVisible(!modalVisible);
-    }
-
-    const showModal = (id) => {
-    setSelectedItem(itemList.find(itemList => itemList.id === id))
-    setModalVisible(!modalVisible);
-    }
-
-    return (
-        <>
-            <FlatList
-                data={itemList}
-                keyExtractor={ item => item.id.toString() }
-                renderItem={({item}) => (
-                    <TouchableOpacity onPress={() => showModal(item.id) }>
-                        <Text style={{fontSize: 20}}>· {item.value}</Text>
-                    </TouchableOpacity>)}
-            />
-
-            <CustomModal
-                deleteItem={deleteItem} 
-                setModalVisible={setModalVisible}
-                selectedItem={selectedItem}
-                modalVisible={modalVisible}
-            />
-        </>
+            <View style={styles.footer}>
+                <Button title="ADD TASKS" onPress={ () => navigation.push('AddTasks') } />
+                <Button title="VIEW TASKS" onPress={ () => navigation.push('ViewTasks') } />
+            </View>
+        </View>
     )
+
 }
+
+const styles = StyleSheet.create({
+    header: {
+        backgroundColor: 'black', 
+        height: '10%', 
+        width: '100%', 
+        justifyContent: 'center', 
+        alignItems: 'center'
+    },
+    title: {
+        color: 'gray',
+        fontSize: 20,
+        marginTop: 30,
+    },
+    footer: {
+        backgroundColor: 'black', 
+        height: '6%', 
+        width: '100%',
+        alignItems: "center",
+        justifyContent: "center",
+        flexDirection: "row",
+    }
+})
 
 export default ViewTasks
